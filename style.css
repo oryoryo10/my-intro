@@ -1,0 +1,140 @@
+:root {
+    --bg-color: #1A365D; /* 深いネイビー（ウェス・アンダーソンの夜空やユニフォームのような色合い） */
+    --frame-bg: #F5ECD5; /* ネイビーと相性抜群の温かいクリーム色 */
+    --text-primary: #1A365D; /* テキストもネイビーに統一して上質に */
+    --accent-color: #D4A35C; /* ネイビーによく映えるマスタードイエロー */
+    --border-color: #C25B56; /* クラシックな印象を与えるくすんだ赤 */
+    --card-bg: #FAFAF5; /* 目に優しいウォームホワイト */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    font-family: 'Noto Serif JP', serif;
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.frame {
+    background-color: var(--frame-bg);
+    width: 90%;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 40px;
+    box-sizing: border-box;
+    border: 4px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.1);
+    position: relative;
+    text-align: center;
+}
+
+/* Inner border for that extra Wes Anderson symmetry/frame look */
+.frame::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    border: 1px solid var(--border-color);
+    pointer-events: none;
+}
+
+header {
+    margin-bottom: 40px;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 20px;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--accent-color);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
+    padding: 20px 30px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+    border-bottom: 1px dashed var(--accent-color);
+    display: inline-block;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+li {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.label {
+    display: block;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+p {
+    line-height: 1.8;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+footer {
+    margin-top: 40px;
+}
+
+.ornament {
+    font-size: 2rem;
+    color: var(--accent-color);
+}
+
+@media (max-width: 600px) {
+    .frame {
+        padding: 20px;
+        margin: 20px auto;
+    }
+    h1 {
+        font-size: 1.8rem;
+    }
+}
