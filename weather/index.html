@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>東京天気 & コーデ</title>
+  <meta name="description" content="東京23区のリアルタイム天気と今日の女性向けコーデを即座に提案">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-weather="default">
+
+  <!-- 天気エフェクト背景 -->
+  <div class="sky" id="sky"></div>
+  <div class="weather-fx" id="weather-fx"></div>
+
+  <!-- ローダー -->
+  <div class="loader" id="loader">
+    <div class="loader-orb"></div>
+    <p class="loader-msg" id="loader-msg">天気を取得中...</p>
+  </div>
+
+  <div class="app" id="app" style="opacity:0">
+
+    <!-- ===== TOP BAR ===== -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-icon">🗼</span>
+        <div>
+          <div class="brand-name">東京天気 &amp; コーデ</div>
+          <div class="brand-date" id="header-date">----年--月--日（-）</div>
+        </div>
+      </div>
+
+      <div class="ward-wrap">
+        <span class="ward-pin">📍</span>
+        <div class="ward-select-box">
+          <select id="ward-select" class="ward-select">
+            <option value="chiyoda">千代田区</option>
+            <option value="chuo">中央区</option>
+            <option value="minato">港区</option>
+            <option value="shinjuku">新宿区</option>
+            <option value="bunkyo">文京区</option>
+            <option value="taito">台東区</option>
+            <option value="sumida">墨田区</option>
+            <option value="koto">江東区</option>
+            <option value="shinagawa">品川区</option>
+            <option value="meguro">目黒区</option>
+            <option value="ota">大田区</option>
+            <option value="setagaya">世田谷区</option>
+            <option value="shibuya" selected>渋谷区</option>
+            <option value="nakano">中野区</option>
+            <option value="suginami">杉並区</option>
+            <option value="toshima">豊島区</option>
+            <option value="kita">北区</option>
+            <option value="arakawa">荒川区</option>
+            <option value="itabashi">板橋区</option>
+            <option value="nerima">練馬区</option>
+            <option value="adachi">足立区</option>
+            <option value="katsushika">葛飾区</option>
+            <option value="edogawa">江戸川区</option>
+          </select>
+          <span class="ward-arrow">▾</span>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <span class="update-badge" id="update-time">--:-- 更新</span>
+        <button class="refresh-btn" id="refresh-btn" aria-label="更新">
+          <span id="refresh-icon">↺</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+
+      <!-- 左：天気 -->
+      <div class="hero-weather">
+        <div class="greeting" id="greeting">こんにちは！</div>
+
+        <div class="hero-main-row">
+          <div class="hero-icon-wrap">
+            <span class="hero-icon" id="weather-icon">⛅</span>
+          </div>
+          <div class="hero-temp-block">
+            <span class="hero-temp" id="current-temp">--</span>
+            <span class="hero-temp-unit">°C</span>
+          </div>
+        </div>
+
+        <div class="hero-desc" id="weather-desc">取得中...</div>
+
+        <div class="hero-sub-row">
+          <span class="sub-item">▲ <strong id="temp-max">--°</strong></span>
+          <span class="sub-sep">｜</span>
+          <span class="sub-item">▼ <strong id="temp-min">--°</strong></span>
+          <span class="sub-sep">｜</span>
+          <span class="sub-item">体感 <strong id="feels-like">--°</strong></span>
+        </div>
+
+        <!-- クイック統計 -->
+        <div class="quick-stats">
+          <div class="qs-chip">
+            <span class="qs-icon">🌧️</span>
+            <div>
+              <div class="qs-val" id="qs-rain">--%</div>
+              <div class="qs-lbl">降水確率</div>
+            </div>
+          </div>
+          <div class="qs-chip">
+            <span class="qs-icon">💧</span>
+            <div>
+              <div class="qs-val" id="qs-humidity">--%</div>
+              <div class="qs-lbl">湿度</div>
+            </div>
+          </div>
+          <div class="qs-chip">
+            <span class="qs-icon">💨</span>
+            <div>
+              <div class="qs-val" id="qs-wind">-- m/s</div>
+              <div class="qs-lbl" id="qs-wind-dir">--</div>
+            </div>
+          </div>
+          <div class="qs-chip">
+            <span class="qs-icon">☀️</span>
+            <div>
+              <div class="qs-val" id="qs-uv">--</div>
+              <div class="qs-lbl" id="qs-uv-lv">UV指数</div>
+            </div>
+          </div>
+          <div class="qs-chip">
+            <span class="qs-icon">🌫️</span>
+            <div>
+              <div class="qs-val" id="qs-pm25">-- μg</div>
+              <div class="qs-lbl" id="qs-pm25-lv">PM2.5</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- アドバイス -->
+        <div class="advice-box" id="advice-box">
+          <span class="advice-icon">💬</span>
+          <span id="advice-text">天気情報を確認中...</span>
+        </div>
+      </div>
+
+      <!-- 右：コーデ -->
+      <div class="hero-outfit">
+        <div class="outfit-header-row">
+          <span class="outfit-hdr-icon">👗</span>
+          <h2 class="outfit-hdr-title">今日のコーデ</h2>
+          <span class="outfit-badge" id="outfit-badge">--</span>
+        </div>
+        <p class="outfit-headline" id="outfit-headline">取得中...</p>
+        <p class="outfit-temptag" id="outfit-temp-tag">--</p>
+
+        <!-- 絵文字ビジュアル -->
+        <div class="emoji-strip" id="emoji-strip"></div>
+
+        <!-- カテゴリ詳細 -->
+        <div class="outfit-cats" id="outfit-cats"></div>
+
+        <!-- 持ちもの -->
+        <div class="carry-section" id="carry-section" style="display:none">
+          <div class="carry-title">🎒 持ちものチェック</div>
+          <div class="carry-chips" id="carry-chips"></div>
+        </div>
+
+        <!-- 警告 -->
+        <div id="warn-area"></div>
+      </div>
+
+    </section>
+
+    <!-- ===== 空気質 & 花粉 ===== -->
+    <section class="aq-row">
+      <div class="aq-card" id="pm25-card">
+        <div class="aq-left">
+          <div class="aq-icon-big">🌫️</div>
+          <div>
+            <div class="aq-metric">PM2.5</div>
+            <div class="aq-big-val"><span id="pm25-val">--</span> <small>μg/m³</small></div>
+            <div class="aq-badge" id="pm25-badge">--</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="aq-card" id="pm10-card">
+        <div class="aq-left">
+          <div class="aq-icon-big">💨</div>
+          <div>
+            <div class="aq-metric">PM10</div>
+            <div class="aq-big-val"><span id="pm10-val">--</span> <small>μg/m³</small></div>
+            <div class="aq-badge" id="pm10-badge">--</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="aq-card pollen-wide">
+        <div class="pollen-title">🌸 花粉情報</div>
+        <div class="pollen-grid">
+          <div class="pollen-item">
+            <span class="pollen-type-icon">🌲</span>
+            <div class="pollen-type-name">スギ/ヒノキ系</div>
+            <div class="pollen-dots" id="birch-dots"></div>
+            <div class="pollen-lbl" id="birch-label">--</div>
+          </div>
+          <div class="pollen-item">
+            <span class="pollen-type-icon">🌾</span>
+            <div class="pollen-type-name">イネ科</div>
+            <div class="pollen-dots" id="grass-dots"></div>
+            <div class="pollen-lbl" id="grass-label">--</div>
+          </div>
+          <div class="pollen-item">
+            <span class="pollen-type-icon">🌿</span>
+            <div class="pollen-type-name">ブタクサ</div>
+            <div class="pollen-dots" id="ragweed-dots"></div>
+            <div class="pollen-lbl" id="ragweed-label">--</div>
+          </div>
+          <div class="pollen-item">
+            <span class="pollen-type-icon">🌱</span>
+            <div class="pollen-type-name">よもぎ</div>
+            <div class="pollen-dots" id="mugwort-dots"></div>
+            <div class="pollen-lbl" id="mugwort-label">--</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 24時間グラフ ===== -->
+    <section class="chart-section">
+      <div class="chart-hdr">
+        <h3 class="chart-title">📊 24時間予報</h3>
+        <div class="chart-tabs">
+          <button class="ctab active" data-chart="temp">🌡️ 気温</button>
+          <button class="ctab" data-chart="rain">🌧️ 降水確率</button>
+          <button class="ctab" data-chart="wind">💨 風速</button>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="forecast-chart"></canvas>
+      </div>
+    </section>
+
+    <footer class="app-footer">
+      データ提供: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
+      ｜ 情報は参考値です。最新情報は気象庁でご確認ください。
+    </footer>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
